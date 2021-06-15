@@ -23,12 +23,14 @@ class FieldListTest extends UnitTestCase
                 'name' => $this->rs(16),
                 'type' => $this->rs(16),
                 'value' => rand(1, 999),
+                'arguments' => [],
             ],
         ];
 
         $list = FieldList::hydrate($array);
 
         $this->assertSame(json_encode($array), json_encode($list));
+        $this->assertSame($array, $list->toArray());
     }
 
     /** @test */

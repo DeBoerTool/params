@@ -24,13 +24,22 @@ class ParamListTest extends UnitTestCase
                 'uuid' => $this->rs(32),
                 'name' => $this->rs(16),
                 'type' => $this->rs(16),
-                'fields' => [],
+                'fields' => [
+                    [
+                        'uuid' => $this->rs(32),
+                        'name' => $this->rs(16),
+                        'type' => $this->rs(16),
+                        'value' => rand(1, 99),
+                        'arguments' => [],
+                    ]
+                ],
             ],
         ];
 
         $list = ParamList::hydrate($array);
 
         $this->assertSame(json_encode($array), json_encode($list));
+        $this->assertSame($list->toArray(), $array);
     }
 
     /** @test */

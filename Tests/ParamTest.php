@@ -22,12 +22,14 @@ class ParamTest extends UnitTestCase
                     'name' => $this->rs(16),
                     'type' => $this->rs(16),
                     'value' => rand(1, 999),
+                    'arguments' => [],
                 ]
             ]
         ];
 
         $param = Param::hydrate($array);
 
+        $this->assertSame($array, $param->toArray());
         $this->assertSame($array['uuid'], $param->uuid());
         $this->assertSame($array['name'], $param->name());
         $this->assertSame($array['type'], $param->type());
@@ -50,6 +52,7 @@ class ParamTest extends UnitTestCase
                     'name' => $this->rs(16),
                     'type' => $this->rs(16),
                     'value' => rand(1, 999),
+                    'arguments' => [],
                 ]
             ]
         ];

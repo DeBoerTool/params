@@ -69,6 +69,14 @@ class FieldList extends ListAbstract
         throw new NoSuchListItemException();
     }
 
+    public function toArray (): array
+    {
+        return array_map(
+            fn (Field $field): array => $field->toArray(),
+            $this->list
+        );
+    }
+
     /**
      * @param int $offset
      */

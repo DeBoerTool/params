@@ -71,6 +71,14 @@ class ParamList extends ListAbstract
         throw NoSuchListItemException::param();
     }
 
+    public function toArray (): array
+    {
+        return array_map(
+            fn (Param $param): array => $param->toArray(),
+            $this->list,
+        );
+    }
+
     public function offsetExists ($offset): bool
     {
         $this->isInt($offset);

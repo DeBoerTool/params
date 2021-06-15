@@ -31,6 +31,7 @@ class FieldTest extends UnitTestCase
         $this->assertSame($array['type'], $field->type());
         $this->assertSame($array['value'], $field->value());
         $this->assertSame($array['arguments'], $field->arguments());
+        $this->assertSame($array, $field->toArray());
 
         unset($array['value']);
 

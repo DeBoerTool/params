@@ -57,6 +57,14 @@ class Param implements JsonSerializable
         return $this->fields;
     }
 
+    public function toArray (): array
+    {
+        return array_merge(
+            $this->mapProperties('uuid', 'name', 'type'),
+            ['fields' => $this->fields->toArray()]
+        );
+    }
+
     public function jsonSerialize (): array
     {
         return $this->mapProperties('uuid', 'name', 'type', 'fields');
