@@ -61,6 +61,10 @@ class FieldTest extends UnitTestCase
             'name' => $this->rs(16),
             'type' => $this->rs(16),
             'value' => rand(1, 999),
+            'arguments' => [
+                'min' => 0,
+                'max' => 99,
+            ],
         ];
 
         $field = Field::hydrate($array);

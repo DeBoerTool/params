@@ -82,7 +82,9 @@ class Field implements JsonSerializable
 
     public function toArray (): array
     {
-        return $this->mapProperties('uuid', 'name', 'type', 'value');
+        return $this->mapProperties(
+            'uuid', 'name', 'type', 'value', 'arguments'
+        );
     }
 
     public function jsonSerialize (): array
