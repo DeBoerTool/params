@@ -48,6 +48,18 @@ abstract class ListAbstract implements JsonSerializable, IteratorAggregate,
         return new static(array_filter($this->list, $cb));
     }
 
+    /**
+     * @return static
+     */
+    public function sort (Closure $cb): self
+    {
+        $list = $this->list;
+
+        usort($list, $cb);
+
+        return new static($list);
+    }
+
     public function map (Closure $cb): array
     {
         return array_map($cb, $this->list);

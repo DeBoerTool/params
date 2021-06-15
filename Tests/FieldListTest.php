@@ -62,9 +62,27 @@ class FieldListTest extends UnitTestCase
             fn (Field $field): bool => $field->value() === 9.8
         );
 
+        $this->assertNotSame($list, $filtered);
         foreach ($filtered as $field) {
             $this->assertSame(9.8, $field->value());
         }
+    }
+
+    /** @test */
+    public function sorting (): void
+    {
+        $list = new FieldList([
+            new Field('', '', '', 1),
+            new Field('', '', '', 2),
+        ]);
+
+        $sorted = $list->sort(
+            fn (Field $a, Field $b): int => $b->value() <=> $a->value(),
+        );
+
+        $this->assertNotSame($list, $sorted);
+        $this->assertSame(2, $sorted->get(0)->value());
+        $this->assertSame(1, $sorted->get(1)->value());
     }
 
     /** @test */

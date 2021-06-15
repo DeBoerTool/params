@@ -66,9 +66,27 @@ class ParamListTest extends UnitTestCase
             fn (Param $param): bool => count($param->fields())
         );
 
+        $this->assertNotSame($list, $filtered);
         foreach ($filtered as $param) {
             $this->assertSame('4', $param->name());
         }
+    }
+
+    /** @test */
+    public function sorting (): void
+    {
+        $list = new ParamList([
+            new Param('', '1', '', new FieldList()),
+            new Param('', '2', '', new FieldList()),
+        ]);
+
+        $sorted = $list->sort(
+            fn (Param $a, Param $b): int => $b->name() <=> $a->name()
+        );
+
+        $this->assertNotSame($list, $sorted);
+        $this->assertSame('2', $sorted[0]->name());
+        $this->assertSame('1', $sorted[1]->name());
     }
 
     /** @test */
