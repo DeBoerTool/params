@@ -13,6 +13,7 @@ class Field implements JsonSerializable
     private string $uuid;
     private string $name;
     private string $type;
+    private array $arguments;
 
     /** @var string|int|float|bool|null */
     private $value;
@@ -24,7 +25,8 @@ class Field implements JsonSerializable
         string $uuid,
         string $name,
         string $type,
-        $value
+        $value,
+        array $arguments = []
     )
     {
         $this->uuid = $uuid;
@@ -36,6 +38,7 @@ class Field implements JsonSerializable
         }
 
         $this->value = $value;
+        $this->arguments = $arguments;
     }
 
     public static function hydrate (array $field): self
@@ -45,6 +48,7 @@ class Field implements JsonSerializable
             $field['name'],
             $field['type'],
             $field['value'] ?? null,
+            $field['arguments'] ?? [],
         );
     }
 
@@ -61,6 +65,11 @@ class Field implements JsonSerializable
     public function type (): string
     {
         return $this->type;
+    }
+
+    public function arguments (): array
+    {
+        return $this->arguments;
     }
 
     /**

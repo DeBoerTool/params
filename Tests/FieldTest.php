@@ -18,6 +18,10 @@ class FieldTest extends UnitTestCase
             'name' => $this->rs(16),
             'type' => $this->rs(16),
             'value' => rand(1, 999),
+            'arguments' => [
+                'min' => 0,
+                'max' => 99,
+            ],
         ];
 
         $field = Field::hydrate($array);
@@ -26,6 +30,7 @@ class FieldTest extends UnitTestCase
         $this->assertSame($array['name'], $field->name());
         $this->assertSame($array['type'], $field->type());
         $this->assertSame($array['value'], $field->value());
+        $this->assertSame($array['arguments'], $field->arguments());
 
         unset($array['value']);
 
