@@ -26,6 +26,12 @@ class FieldTest extends UnitTestCase
         $this->assertSame($array['name'], $field->name());
         $this->assertSame($array['type'], $field->type());
         $this->assertSame($array['value'], $field->value());
+
+        unset($array['value']);
+
+        $field = Field::hydrate($array);
+
+        $this->assertNull($field->value());
     }
 
     /** @test */

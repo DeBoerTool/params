@@ -14,11 +14,11 @@ class Field implements JsonSerializable
     private string $name;
     private string $type;
 
-    /** @var string|int|float|bool */
+    /** @var string|int|float|bool|null */
     private $value;
 
     /**
-     * @param string|int|float|bool|mixed $value
+     * @param string|int|float|bool|null $value
      */
     public function __construct (
         string $uuid,
@@ -31,7 +31,7 @@ class Field implements JsonSerializable
         $this->name = $name;
         $this->type = $type;
 
-        if (!is_string($value) && !is_int($value) && !is_float($value) && !is_bool($value)) {
+        if (!$this->isValidType($value)) {
             throw new InvalidArgumentException('Invalid value type.');
         }
 
@@ -44,7 +44,7 @@ class Field implements JsonSerializable
             $field['uuid'],
             $field['name'],
             $field['type'],
-            $field['value'],
+            $field['value'] ?? null,
         );
     }
 
@@ -64,7 +64,7 @@ class Field implements JsonSerializable
     }
 
     /**
-     * @return bool|float|int|string
+     * @return bool|float|int|string|null
      */
     public function value ()
     {
@@ -79,5 +79,18 @@ class Field implements JsonSerializable
     public function jsonSerialize (): array
     {
         return $this->toArray();
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isValidType ($value): bool
+    {
+        return is_string($value)
+            || is_int($value)
+            || is_float($value)
+            || is_bool($value)
+            || is_null($value);
     }
 }
