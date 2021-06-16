@@ -2,19 +2,19 @@
 
 namespace Dbt\Params\Tests;
 
-use Dbt\Params\Exceptions\NoSuchListItemException;
+use Dbt\Params\Exceptions\NotFoundException;
 
 /**
- * @covers \Dbt\Params\Exceptions\NoSuchListItemException
+ * @covers \Dbt\Params\Exceptions\NotFoundException
  */
-class NoSuchListItemExceptionTest extends UnitTestCase
+class NotFoundExceptionTest extends UnitTestCase
 {
     /** @test */
     public function message_for_param (): void
     {
         try {
-            throw NoSuchListItemException::param();
-        } catch (NoSuchListItemException $exception) {
+            throw NotFoundException::param();
+        } catch (NotFoundException $exception) {
             $this->assertStringContainsString(
                 'Param',
                 $exception->getMessage()
@@ -25,8 +25,8 @@ class NoSuchListItemExceptionTest extends UnitTestCase
     public function message_for_field (): void
     {
         try {
-            throw NoSuchListItemException::field();
-        } catch (NoSuchListItemException $exception) {
+            throw NotFoundException::field();
+        } catch (NotFoundException $exception) {
             $this->assertStringContainsString(
                 'Field',
                 $exception->getMessage()

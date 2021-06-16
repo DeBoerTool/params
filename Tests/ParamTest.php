@@ -12,13 +12,17 @@ class ParamTest extends UnitTestCase
     /** @test */
     public function hydrating (): void
     {
+        $joinUuid = $this->rs(32);
+
         $array = [
             'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
             'name' => $this->rs(16),
             'type' => $this->rs(16),
             'fields' => [
-                [
+                $joinUuid => [
                     'uuid' => $this->rs(32),
+                    'join_uuid' => $joinUuid,
                     'name' => $this->rs(16),
                     'type' => $this->rs(16),
                     'value' => rand(1, 999),
@@ -34,21 +38,25 @@ class ParamTest extends UnitTestCase
         $this->assertSame($array['name'], $param->name());
         $this->assertSame($array['type'], $param->type());
         $this->assertSame(
-            $array['fields'][0],
-            $param->fields()->get(0)->jsonSerialize(),
+            $array['fields'][$joinUuid],
+            $param->fields()->get($joinUuid)->jsonSerialize(),
         );
     }
 
     /** @test */
     public function serializing_to_json (): void
     {
+        $joinUuid = $this->rs(32);
+
         $array = [
             'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
             'name' => $this->rs(16),
             'type' => $this->rs(16),
             'fields' => [
-                [
+                $joinUuid => [
                     'uuid' => $this->rs(32),
+                    'join_uuid' => $joinUuid,
                     'name' => $this->rs(16),
                     'type' => $this->rs(16),
                     'value' => rand(1, 999),

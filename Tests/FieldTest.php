@@ -15,6 +15,7 @@ class FieldTest extends UnitTestCase
     {
         $array = [
             'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
             'name' => $this->rs(16),
             'type' => $this->rs(16),
             'value' => rand(1, 999),
@@ -27,6 +28,7 @@ class FieldTest extends UnitTestCase
         $field = Field::hydrate($array);
 
         $this->assertSame($array['uuid'], $field->uuid());
+        $this->assertSame($array['join_uuid'], $field->joinUuid());
         $this->assertSame($array['name'], $field->name());
         $this->assertSame($array['type'], $field->type());
         $this->assertSame($array['value'], $field->value());
@@ -43,35 +45,24 @@ class FieldTest extends UnitTestCase
     /** @test */
     public function failing_with_invalid_value_type (): void
     {
-        new Field('', '', '', '');
-        new Field('', '', '', 1);
-        new Field('', '', '', 1.1);
-        new Field('', '', '', true);
+        $this->makeField(['value' => 'string']);
+        $this->makeField(['value' => 1]);
+        $this->makeField(['value' => 1.1]);
+        $this->makeField(['value' => true]);
+        $this->makeField(['value' => null]);
 
         $this->expectException(InvalidArgumentException::class);
 
-        /** @noinspection PhpParamsInspection */
-        new Field('', '', '', []);
+        $this->makeField(['value' => []]);
     }
 
     /** @test */
     public function serializing_to_json (): void
     {
-        $array = [
-            'uuid' => $this->rs(32),
-            'name' => $this->rs(16),
-            'type' => $this->rs(16),
-            'value' => rand(1, 999),
-            'arguments' => [
-                'min' => 0,
-                'max' => 99,
-            ],
-        ];
-
-        $field = Field::hydrate($array);
+        $field = $this->makeField();
 
         $json = json_encode($field);
 
-        $this->assertSame($array, json_decode($json, true));
+        $this->assertSame($field->toArray(), json_decode($json, true));
     }
 }
