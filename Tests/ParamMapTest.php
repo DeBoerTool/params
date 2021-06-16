@@ -240,6 +240,38 @@ class ParamMapTest extends UnitTestCase
     }
 
     /** @test */
+    public function getting_a_list_of_fields (): void
+    {
+        $fields = [
+            [
+                'uuid' => $this->rs(32),
+                'join_uuid' => $this->rs(32),
+                'name' => $this->rs(16),
+                'type' => $this->rs(16),
+            ],
+            [
+                'uuid' => $this->rs(32),
+                'join_uuid' => $this->rs(32),
+                'name' => $this->rs(16),
+                'type' => $this->rs(16),
+            ]
+        ];
+
+        $array = [[
+            'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
+            'name' => $this->rs(16),
+            'type' => $this->rs(16),
+            'fields' => $fields,
+        ]];
+
+        $map = ParamMap::hydrate($array);
+
+        $this->assertSame($fields[0]['uuid'], $map->fieldList()[0]->uuid());
+        $this->assertSame($fields[1]['uuid'], $map->fieldList()[1]->uuid());
+    }
+
+    /** @test */
     public function iterating (): void
     {
         $map = new ParamMap([

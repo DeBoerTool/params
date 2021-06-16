@@ -152,6 +152,22 @@ class ParamMap implements IteratorAggregate, Countable, ArrayAccess,
         return $reduced;
     }
 
+    /**
+     * @return Field[]
+     */
+    public function fieldList (): array
+    {
+        $fields = [];
+
+        foreach ($this->items as $param) {
+            foreach ($param->fields() as $field) {
+                $fields[] = $field;
+            }
+        }
+
+        return $fields;
+    }
+
     public function toArray (): array
     {
         $array = [];
