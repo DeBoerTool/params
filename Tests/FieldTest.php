@@ -43,6 +43,27 @@ class FieldTest extends UnitTestCase
     }
 
     /** @test */
+    public function getting_the_composite_key (): void
+    {
+        $joinUuid = $this->rs(32);
+        $uuid = $this->rs(32);
+
+        $array = [
+            'uuid' => $uuid,
+            'join_uuid' => $joinUuid,
+            'name' => $this->rs(16),
+            'type' => $this->rs(16),
+        ];
+
+        $field = Field::hydrate($array);
+
+        $this->assertSame(
+            implode('_', [$joinUuid, $uuid]),
+            $field->compositeKey(),
+        );
+    }
+
+    /** @test */
     public function failing_with_invalid_value_type (): void
     {
         $this->makeField(['value' => 'string']);

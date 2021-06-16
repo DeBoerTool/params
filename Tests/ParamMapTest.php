@@ -189,6 +189,57 @@ class ParamMapTest extends UnitTestCase
     }
 
     /** @test */
+    public function getting_a_flattened_values_array (): void
+    {
+        $field1 = [
+            'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
+            'name' => $this->rs(16),
+            'type' => $this->rs(16),
+            'value' => 99,
+        ];
+
+        $field2 = [
+            'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
+            'name' => $this->rs(16),
+            'type' => $this->rs(16),
+            'value' => 98,
+        ];
+
+        $param = [
+            'uuid' => $this->rs(32),
+            'join_uuid' => $this->rs(32),
+            'name' => $this->rs(16),
+            'type' => $this->rs(16),
+            'fields' => [$field1, $field2],
+        ];
+
+        $key1 = implode('_', [
+            $param['join_uuid'],
+            $param['uuid'],
+            $field1['join_uuid'],
+            $field1['uuid'],
+        ]);
+
+        $key2 = implode('_', [
+            $param['join_uuid'],
+            $param['uuid'],
+            $field2['join_uuid'],
+            $field2['uuid'],
+        ]);
+
+        $values = [
+            $key1 => 99,
+            $key2 => 98
+        ];
+
+        $map = ParamMap::hydrate([$param]);
+
+        $this->assertSame($values, $map->values());
+    }
+
+    /** @test */
     public function iterating (): void
     {
         $map = new ParamMap([

@@ -86,6 +86,11 @@ class Field implements JsonSerializable
         return $this->value;
     }
 
+    public function compositeKey (): string
+    {
+        return implode('_', [$this->joinUuid(), $this->uuid()]);
+    }
+
     public function toArray (): array
     {
         return [
