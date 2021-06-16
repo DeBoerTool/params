@@ -112,6 +112,30 @@ class ParamMap implements IteratorAggregate, Countable, ArrayAccess,
         throw NotFoundException::param();
     }
 
+    public function values (): array
+    {
+        $values = [];
+
+        /**
+         * @var \Dbt\Params\Param $param
+         */
+        foreach ($this->items as $param) {
+            /**
+             * @var \Dbt\Params\Field $field
+             */
+            foreach ($param->fields() as $field) {
+                $key = implode('_', [
+                    $param->compositeKey(),
+                    $field->compositeKey(),
+                ]);
+
+                $values[$key] = $field->value();
+            }
+        }
+
+        return $values;
+    }
+
     /**
      * @param \Closure $cb
      * @param mixed $initial

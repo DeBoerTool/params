@@ -63,6 +63,11 @@ class Param implements JsonSerializable
         return $this->fields;
     }
 
+    public function compositeKey (): string
+    {
+        return implode('_', [$this->joinUuid(), $this->uuid()]);
+    }
+
     public function toArray (): array
     {
         return [
