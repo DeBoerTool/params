@@ -2,26 +2,26 @@
 
 namespace Dbt\Params;
 
-use Dbt\Params\Traits\MapsProperties;
 use JsonSerializable;
 
 class Param implements JsonSerializable
 {
-    use MapsProperties;
-
     private string $uuid;
+    private string $joinUuid;
     private string $name;
     private string $type;
-    private FieldList $fields;
+    private FieldMap $fields;
 
     public function __construct (
         string $uuid,
+        string $joinUuid,
         string $name,
         string $type,
-        FieldList $fields
+        FieldMap $fields
     )
     {
         $this->uuid = $uuid;
+        $this->joinUuid = $joinUuid;
         $this->name = $name;
         $this->type = $type;
         $this->fields = $fields;
@@ -31,15 +31,21 @@ class Param implements JsonSerializable
     {
         return new self(
             $param['uuid'],
+            $param['join_uuid'],
             $param['name'],
             $param['type'],
-            FieldList::hydrate($param['fields'])
+            FieldMap::hydrate($param['fields'])
         );
     }
 
     public function uuid (): string
     {
         return $this->uuid;
+    }
+
+    public function joinUuid (): string
+    {
+        return $this->joinUuid;
     }
 
     public function name (): string
@@ -52,21 +58,30 @@ class Param implements JsonSerializable
         return $this->type;
     }
 
-    public function fields (): FieldList
+    public function fields (): FieldMap
     {
         return $this->fields;
     }
 
     public function toArray (): array
     {
-        return array_merge(
-            $this->mapProperties('uuid', 'name', 'type'),
-            ['fields' => $this->fields->toArray()]
-        );
+        return [
+            'uuid' => $this->uuid(),
+            'join_uuid' => $this->joinUuid(),
+            'name' => $this->name(),
+            'type' => $this->type(),
+            'fields' => $this->fields()->toArray(),
+        ];
     }
 
     public function jsonSerialize (): array
     {
-        return $this->mapProperties('uuid', 'name', 'type', 'fields');
+        return [
+            'uuid' => $this->uuid(),
+            'join_uuid' => $this->joinUuid(),
+            'name' => $this->name(),
+            'type' => $this->type(),
+            'fields' => $this->fields(),
+        ];
     }
 }

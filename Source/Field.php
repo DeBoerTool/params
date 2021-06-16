@@ -2,15 +2,13 @@
 
 namespace Dbt\Params;
 
-use Dbt\Params\Traits\MapsProperties;
 use InvalidArgumentException;
 use JsonSerializable;
 
 class Field implements JsonSerializable
 {
-    use MapsProperties;
-
     private string $uuid;
+    private string $joinUuid;
     private string $name;
     private string $type;
     private array $arguments;
@@ -23,6 +21,7 @@ class Field implements JsonSerializable
      */
     public function __construct (
         string $uuid,
+        string $joinUuid,
         string $name,
         string $type,
         $value,
@@ -30,21 +29,23 @@ class Field implements JsonSerializable
     )
     {
         $this->uuid = $uuid;
+        $this->joinUuid = $joinUuid;
         $this->name = $name;
         $this->type = $type;
+        $this->arguments = $arguments;
 
         if (!$this->isValidType($value)) {
             throw new InvalidArgumentException('Invalid value type.');
         }
 
         $this->value = $value;
-        $this->arguments = $arguments;
     }
 
     public static function hydrate (array $field): self
     {
         return new self(
             $field['uuid'],
+            $field['join_uuid'],
             $field['name'],
             $field['type'],
             $field['value'] ?? null,
@@ -55,6 +56,11 @@ class Field implements JsonSerializable
     public function uuid (): string
     {
         return $this->uuid;
+    }
+
+    public function joinUuid (): string
+    {
+        return $this->joinUuid;
     }
 
     public function name (): string
@@ -82,9 +88,14 @@ class Field implements JsonSerializable
 
     public function toArray (): array
     {
-        return $this->mapProperties(
-            'uuid', 'name', 'type', 'value', 'arguments'
-        );
+        return [
+            'uuid' => $this->uuid,
+            'join_uuid' => $this->joinUuid,
+            'name' => $this->name,
+            'type' => $this->type,
+            'value' => $this->value,
+            'arguments' => $this->arguments,
+        ];
     }
 
     public function jsonSerialize (): array

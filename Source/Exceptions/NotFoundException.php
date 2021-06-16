@@ -4,7 +4,7 @@ namespace Dbt\Params\Exceptions;
 
 use Exception;
 
-class NoSuchListItemException extends Exception
+class NotFoundException extends Exception
 {
     protected static string $format = 'No %s matching the given criteria was found.';
 
