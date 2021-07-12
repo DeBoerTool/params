@@ -100,4 +100,14 @@ class FieldTest extends UnitTestCase
         $this->assertSame($field->uuid(), $mutated->uuid());
         $this->assertSame($mutated->value(), $newValue);
     }
+
+    /** @test */
+    public function is_null (): void
+    {
+        $field1 = $this->makeField();
+        $field2 = $this->makeField(['value' => null]);
+
+        $this->assertFalse($field1->isNull());
+        $this->assertTrue($field2->isNull());
+    }
 }

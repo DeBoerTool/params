@@ -86,6 +86,11 @@ class Field implements JsonSerializable
         return $this->value;
     }
 
+    public function isNull (): bool
+    {
+        return is_null($this->value);
+    }
+
     /**
      * @param bool|float|int|string|null $value
      * @return $this
