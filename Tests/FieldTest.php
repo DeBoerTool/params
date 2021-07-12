@@ -86,4 +86,18 @@ class FieldTest extends UnitTestCase
 
         $this->assertSame($field->toArray(), json_decode($json, true));
     }
+
+    /** @test */
+    public function mutating (): void
+    {
+        $field = $this->makeField();
+
+        $newValue = $this->rs(16);
+        $mutated = $field->mutate($newValue);
+
+        $this->assertNotSame($field, $mutated);
+        $this->assertNotSame($field->value(), $mutated->value());
+        $this->assertSame($field->uuid(), $mutated->uuid());
+        $this->assertSame($mutated->value(), $newValue);
+    }
 }
