@@ -162,11 +162,11 @@ class ParamMapTest extends UnitTestCase
     /** @test */
     public function not_finding (): void
     {
-        $list = new ParamMap();
+        $map = new ParamMap();
 
         $this->expectException(NotFoundException::class);
 
-        $list->find(fn (string $_, Param $param): bool =>
+        $map->find(fn (string $_, Param $param): bool =>
             $param->name() === '2'
         );
     }
@@ -176,16 +176,56 @@ class ParamMapTest extends UnitTestCase
     {
         $param = $this->makeParam();
 
-        $list = new ParamMap([
+        $map = new ParamMap([
             $this->makeParam(),
             $param,
             $this->makeParam(),
         ]);
 
         $this->assertSame(
-            $list->get($param->joinUuid()),
+            $map->get($param->joinUuid()),
             $param,
         );
+    }
+
+    /** @test */
+    public function plucking_a_value (): void
+    {
+        $value = $this->rs(16);
+        $field = $this->makeField(['value' => $value]);
+        $param = $this->makeParam();
+        $param->fields()->put($this->rs(32), $field);
+
+        $map = new ParamMap([
+            $param,
+        ]);
+
+        $plucked = $map->pluckByName($param->name(), $field->name());
+
+        $this->assertSame($value, $plucked);
+    }
+
+    /** @test */
+    public function failing_to_pluck_a_value_with_missing_param (): void
+    {
+        $map = new ParamMap();
+
+        $this->expectException(NotFoundException::class);
+
+        $map->pluckByName($this->rs(16), '');
+    }
+
+    /** @test */
+    public function failing_to_pluck_a_value_with_missing_field (): void
+    {
+        $param = $this->makeParam();
+        $map = new ParamMap([
+            $param,
+        ]);
+
+        $this->expectException(NotFoundException::class);
+
+        $map->pluckByName($param->name(), $this->rs(16));
     }
 
     /** @test */

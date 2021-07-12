@@ -112,6 +112,23 @@ class ParamMap implements IteratorAggregate, Countable, ArrayAccess,
         throw NotFoundException::param();
     }
 
+    /**
+     * Get the value of the first matching Param and Field.
+     * @throws \Dbt\Params\Exceptions\NotFoundException
+     */
+    public function pluckByName (string $paramName, string $fieldName)
+    {
+        $param = $this->find(
+            fn($_, Param $param) => $param->name() === $paramName
+        );
+
+        $field = $param->fields()->find(
+            fn($_, Field $field) => $field->name() === $fieldName
+        );
+
+        return $field->value();
+    }
+
     public function values (): array
     {
         $values = [];
