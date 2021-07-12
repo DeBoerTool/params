@@ -86,6 +86,21 @@ class Field implements JsonSerializable
         return $this->value;
     }
 
+    /**
+     * @param bool|float|int|string|null $value
+     * @return $this
+     */
+    public function mutate ($value): self
+    {
+        return new self(
+            $this->uuid(),
+            $this->joinUuid(),
+            $this->name(),
+            $this->type(),
+            $value,
+        );
+    }
+
     public function compositeKey (): string
     {
         return implode('_', [$this->joinUuid(), $this->uuid()]);

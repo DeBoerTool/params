@@ -56,6 +56,16 @@ class FieldMap implements IteratorAggregate, Countable, ArrayAccess,
         return $this;
     }
 
+    /**
+     * @param bool|float|int|string|null $value
+     */
+    public function mutate (string $joinUuid, $value): self
+    {
+        $this->items[$joinUuid] = $this->items[$joinUuid]->mutate($value);
+
+        return $this;
+    }
+
     public function unset (string $joinUuid): void
     {
         unset($this->items[$joinUuid]);

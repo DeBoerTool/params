@@ -149,11 +149,11 @@ class FieldMapTest extends UnitTestCase
     /** @test */
     public function not_finding (): void
     {
-        $list = new FieldMap();
+        $map = new FieldMap();
 
         $this->expectException(NotFoundException::class);
 
-        $list->find(fn (string $_, Field $field): bool =>
+        $map->find(fn (string $_, Field $field): bool =>
             $field->name() === '2'
         );
     }
@@ -163,15 +163,39 @@ class FieldMapTest extends UnitTestCase
     {
         $field = $this->makeField();
 
-        $list = new FieldMap([
+        $map = new FieldMap([
             $this->makeField(),
             $field,
             $this->makeField(),
         ]);
 
         $this->assertSame(
-            $list->get($field->joinUuid()),
+            $map->get($field->joinUuid()),
             $field,
+        );
+    }
+
+    /** @test */
+    public function mutating_a_member (): void
+    {
+        $field = $this->makeField();
+
+        $map = new FieldMap([
+            $this->makeField(),
+            $field,
+            $this->makeField(),
+        ]);
+
+        $this->assertSame($field, $map->get($field->joinUuid()));
+
+        $newValue = $this->rs(16);
+        $map->mutate($field->joinUuid(), $newValue);
+
+        $this->assertNotSame($field, $map->get($field->joinUuid()));
+        $this->assertSame($newValue, $map->get($field->joinUuid())->value());
+        $this->assertSame(
+            $field->uuid(),
+            $map->get($field->joinUuid())->uuid()
         );
     }
 
